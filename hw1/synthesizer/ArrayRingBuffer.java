@@ -27,7 +27,9 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
      * covered Monday.
      */
     public void enqueue(T x) {
-
+        if (x == null) {
+            return;
+        }
         if (isFull()) {
             throw new RuntimeException("queue is full");
         }
@@ -49,6 +51,9 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         if (isEmpty()) {
             throw new RuntimeException("queue is empty");
         }
+        if (first == capacity()) {
+            first = 0;
+        }
         T result = rb[first];
         rb[first] = null;
         first++;
@@ -63,8 +68,16 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         if (isEmpty()) {
             throw new RuntimeException("queue is empty");
         }
+
+        //if first equals capacity,rb[first] is null, so make it wrap-around by changing the index to 0
+        if(first == capacity()) {
+            first = 0;
+        }
         return rb[first];
     }
+
+
+
 
     // TODO: When you get to part 5, implement the needed code to support iteration.
 }
